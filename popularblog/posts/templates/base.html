@@ -1,0 +1,32 @@
+{# шаблон base.html **#}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    {% block title %}
+    ss
+    {% endblock %}
+  </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  {% include "header.html" %}
+  <nav id="sidebar">
+    {% block sidebar %}
+    <ul>
+      <li><a href="/">Главная</a></li>
+      <li><a href="/about/">О сайте</a></li>
+      <li><a href="/list/">Сообщения</a></li>
+    </ul>
+    {% endblock %}
+  </nav>
+  <div id="content">
+  {% block content %}
+    Контент не подвезли :(
+  {% endblock %}
+  </div>
+  {% include "footer.html" %}
+</body>
+</html> 
