@@ -21,3 +21,13 @@ def group_posts(request, slug):
         'group.html',
         {'group':group, 'posts':posts}
     )
+'''CRUD операции
+Create 
+Model.objects.create()
+Read
+Models.objects.get(id = N)
+
+Update
+object.property = 'new_value'
+Delete
+object.delete()'''
