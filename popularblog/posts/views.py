@@ -1,6 +1,10 @@
+from django.contrib.auth.decorators import login_required
+from django.db import models
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from .forms import PostForm
 from .models import Group, Post
 
 
@@ -12,7 +16,6 @@ def index(request):
         {'posts' : latest}
     )
 
-
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     posts = group.grposts.all()
@@ -21,13 +24,18 @@ def group_posts(request, slug):
         'group.html',
         {'group':group, 'posts':posts}
     )
-'''CRUD операции
-Create 
-Model.objects.create()
-Read
-Models.objects.get(id = N)
 
-Update
-object.property = 'new_value'
-Delete
-object.delete()'''
+class NewPost(CreateView):
+    form_class = PostForm
+    success_url = reverse_lazy('new')
+    template_name = 'new.html'
+
+@login_required()
+def new_post(request):
+    form = PostForm(request.POST or None)
+    if not form.is_valid():
+        return render(request, 'new.html', {'form':form})
+    post = form.save(commit=False)
+    post.author = request.user
+    post.save()
+    return redirect('index')

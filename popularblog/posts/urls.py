@@ -5,5 +5,6 @@ urlpatterns = [
     path('group/<slug:slug>/',
     views.group_posts,
     name='posts_group'
-    )
+    ),
+    path('new/', views.new_post, name='new')
 ]
