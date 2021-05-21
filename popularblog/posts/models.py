@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import constraints
+from django.forms import fields
+from django.forms.formsets import ORDERING_FIELD_NAME
 
 User = get_user_model()
 
@@ -22,3 +25,44 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-pub_date']
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comment'
+    )
+    auhtor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comment'
+    )
+    text = models.TextField()
+    created = models.DateTimeField('Дата публикации', auto_now_add=True)
+    active = models.BooleanField(default=True)
+    class Meta:
+        ordering= ('created',)
+    
+    def __str__(self):
+        return self.text
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower'
+    )
+    auhtor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following'
+    )
+    
+    class Meta:
+        constraints =[
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='uniqu_user_author'
+            )
+        ]

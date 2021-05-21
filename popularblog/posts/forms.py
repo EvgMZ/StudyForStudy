@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django import forms
 from django.forms import fields
-from .models import Post
+from .models import Post, Comment
 
 User = get_user_model()
 
@@ -21,3 +21,9 @@ class PostForm(forms.ModelForm):
             'group' : 'Группа',
             'text' : 'Текст'
         }
+class CommentForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Comment
+        fields = {'text'}
